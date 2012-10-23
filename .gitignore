@@ -1,0 +1,8 @@
+gwt-unitCache/
+war/devreleu/
+.project
+.classpath
+.settings/
+war/WEB-INF/deploy/
+war/WEB-INF/lib/
+*.class
