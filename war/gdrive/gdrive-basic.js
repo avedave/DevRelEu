@@ -29,18 +29,26 @@ function checkAuth() {
  */
 function handleAuthResult(authResult) {
 	console.log('handleAuthResult');
+	var filePicker = document.getElementById('filePicker');
+	var authButton = document.getElementById('authButton');
 	if (authResult && !authResult.error) {
 		console.log('handleAuthResult OK');
-		// Access token has been successfully retrieved, requests can be sent to the API
-		var filePicker = document.getElementById('filePicker');
-		filePicker.style.visibility = '';
+		// Access token has been successfully retrieved, requests can be sent to the API		
+		authButton.style.display = 'none';
+		filePicker.style.display = 'block';
 		filePicker.onchange = uploadFile;
 	} else {
 		console.log('handleAuthResult null or error');
+		filePicker.style.display = 'none';
+		authButton.style.display = 'block';
+		authButton.value = 'Click to authenticate';
 		// No access token could be retrieved, force the authorization flow
-		gapi.auth.authorize(
+		authButton.onclick = function () {
+			gapi.auth.authorize(
 				{'client_id': CLIENT_ID, 'scope': SCOPES, 'immediate': false},
 				handleAuthResult);
+		}
+		
 	}
 }
 
