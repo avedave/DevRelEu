@@ -107,9 +107,26 @@ function insertFile(fileData, callback) {
           'body': multipartRequestBody});
       if (!callback) {
         callback = function(file) {
-          console.log(file);
+          console.log("kind=" + file.kind + ' id=' + file.id);
+          copyFile(file.id);
         };
       }
       request.execute(callback);
     }
+}
+
+function copyFile(fileId, callback) {
+	console.log('copyFile');
+	var body = {'title': 'Kopia'};
+    var request = gapi.client.drive.files.copy({
+        'fileId': fileId,
+        'resource': body
+    });
+    
+    if (!callback) {
+        callback = function(file) {
+          console.log("COPIED kind=" + file.kind + ' id=' + file.id);
+        };
+      }
+    request.execute(callback);
 }
