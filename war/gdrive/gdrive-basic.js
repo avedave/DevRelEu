@@ -37,6 +37,7 @@ function handleAuthResult(authResult) {
 		authButton.style.display = 'none';
 		filePicker.style.display = 'block';
 		filePicker.onchange = uploadFile;
+
 	} else {
 		console.log('handleAuthResult null or error');
 		filePicker.style.display = 'none';
@@ -109,6 +110,7 @@ function insertFile(fileData, callback) {
         callback = function(file) {
           console.log("kind=" + file.kind + ' id=' + file.id);
           copyFile(file.id);
+          touchFile(file.id);
         };
       }
       request.execute(callback);
@@ -129,4 +131,14 @@ function copyFile(fileId, callback) {
         };
       }
     request.execute(callback);
+}
+
+function touchFile(fileId) {
+	console.log('touchFile');
+	var request = gapi.client.drive.files.touch({
+		'fileId': fileId
+	});
+	request.execute(function(resp) {
+		console.log('Touched.' + resp)
+	});
 }
