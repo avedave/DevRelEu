@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 400px }
+    </style>
+
+    <script type="text/javascript" src="maps_init.js">
+    </script>
+    <script type="text/javascript">
+    
+    function codeAddress() {
+        var address = document.getElementById("address").value;
+        geocoder.geocode( { 'address': address}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) {
+            map.setCenter(results[0].geometry.location);
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location
+            });
+          } else {
+            alert("Geocode was not successful for the following reason: " + status);
+          }
+        });
+      }
+    
+      function codeLatLng() {
+    	  var latitude = document.getElementById("lat").value;
+    	  var longitude = document.getElementById("lon").value;
+    	  var latLng = new google.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
+    	  
+    	  geocoder.geocode({'latLng': latLng}, function(results, status) {
+    	      if (status == google.maps.GeocoderStatus.OK) {
+    	        if (results[1]) {
+    	          map.setZoom(11);
+    	          marker = new google.maps.Marker({
+    	              position: latLng,
+    	              map: map
+    	          });
+    	          var infowindow = new google.maps.InfoWindow();
+    	          infowindow.setContent(results[1].formatted_address);
+    	          infowindow.open(map, marker);
+    	        }
+    	      } else {
+    	        alert("Geocoder failed due to: " + status);
+    	      }
+    	    });
+      }
+    </script>
+  </head>
+  <body>
+    <div id="map_canvas" style="width:500px; height:400px"></div>
+    <div>
+	    <input id="address" type="text" value="Zakopane, Polska">
+	    <input type="button" value="Encode" onclick="codeAddress()">
+  	</div>
+  	    <div>
+	    <input id="lat" type="text" value="">
+	    <input id="lon" type="text" value="">
+	    <input type="button" value="Encode" onclick="codeLatLng()">
+  	</div>
+  </body>
+</html>
